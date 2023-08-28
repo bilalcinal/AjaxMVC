@@ -27,17 +27,16 @@ namespace AjaxMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(ProductModel model)
+        public async Task<ActionResult> CreateProduct(ProductModel productmodel)
         {
-            var entity = new Product
+            var product = new Product
             {
-                ProductName = model.ProductName,
-                ProductPrice = model.ProductPrice
+                ProductName = productmodel.ProductName,
+                ProductPrice = productmodel.ProductPrice,
             };
-
-            _ajaxMvcDbContext.Products.Add(entity);
+            _ajaxMvcDbContext.Products.Add(product);
             await _ajaxMvcDbContext.SaveChangesAsync();
-            return Ok(entity);
+            return Ok();
         }
 
         [HttpPut]
