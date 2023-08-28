@@ -1,7 +1,6 @@
 ﻿
     loadProducts();
 
-
     function loadProducts() {
         $.ajax({
             url: '/api/Product/GetProducts',
@@ -11,7 +10,6 @@
             }
         });
     }
-
 
     function displayProducts(products) {
         var table = $('#productsTable tbody');
