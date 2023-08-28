@@ -38,7 +38,8 @@
                     <form id="createProductForm">
                         <div class="form-group">
                             <label for="productName">Product Name</label>
-                            <input type="text" class="form-control" id="productName" required>
+                            <input type="text" class="form-control" id="productName" required pattern="[a-zA-ZğüşıöçĞÜŞİÖÇ]{1,20}" title="Sadece harf karakterleri kullanılabilir.">
+                            <div class="invalid-feedback">Sadece harf karakterleri kullanılabilir.</div>
                         </div>
                         <div class="form-group">
                             <label for="productPrice">Product Price</label>
@@ -65,8 +66,9 @@
                     <form id="editProductForm">
                         <input type="hidden" id="editProductId">
                         <div class="form-group">
-                            <label for="editProductName">Product Name</label>
-                            <input type="text" class="form-control" id="editProductName" required>
+                            <label for="productName">Product Name</label>
+                            <input type="text" class="form-control" id="productName" required pattern="[a-zA-ZğüşıöçĞÜŞİÖÇ]{1,20}" title="Sadece harf karakterleri kullanılabilir.">
+                            <div class="invalid-feedback">Sadece harf karakterleri kullanılabilir.</div>
                         </div>
                         <div class="form-group">
                             <label for="editProductPrice">Product Price</label>
@@ -78,6 +80,7 @@
             </div>
         </div>
     </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -85,105 +88,3 @@
 
 </body>
 </html> 
-@* <script>
-    // Create Product
-    $("#createProductForm").submit(function (event) {
-        event.preventDefault();
-
-        var productName = $("#productName").val();
-        var productPrice = $("#productPrice").val();
-
-        var data = {
-            ProductName: productName,
-            ProductPrice: parseFloat(productPrice)
-        };
-
-        $.ajax({
-            type: "POST",
-            url: "/api/Product/CreateProduct",
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            success: function () {
-                // Refresh product list after successful creation
-                loadProducts();
-                $("#createProductModal").modal("hide");
-            }
-        });
-    });
-      // Edit product
-    $('#productsTable').on('click', '.edit-btn', function () {
-        var row = $(this).closest('tr');
-        var productId = row.data('id');
-        var productName = row.find('td:eq(0)').text();
-        var productPrice = parseFloat(row.find('td:eq(1)').text());
-
-        // Populate edit form
-        $('#editProductId').val(productId);
-        $('#editProductName').val(productName);
-        $('#editProductPrice').val(productPrice);
-        $('#editProductModal').modal('show');
-    });
-
-    // Handle edit product form submission
-    $('#editProductForm').submit(function (e) {
-        e.preventDefault();
-
-        var productId = parseInt($('#editProductId').val());
-        var productName = $('#editProductName').val();
-        var productPrice = parseFloat($('#editProductPrice').val());
-
-        $.ajax({
-            url: '/api/Product/UpdateProduct?id=' + productId,
-            type: 'POST',
-            data: JSON.stringify({ productName: productName, productPrice: productPrice }),
-            contentType: 'application/json',
-            success: function () {
-                loadProducts();
-                $('#editProductModal').modal('hide');
-            }
-        });
-    });
-    // Delete Product
-    function deleteProduct(productId) {
-        if (confirm("Are you sure you want to delete this product?")) {
-            $.ajax({
-                type: "DELETE",
-                url: `/api/Product/DeleteProduct/${productId}`,
-                success: function () {
-                    loadProducts(); // Refresh product list after successful delete
-                }
-            });
-        }
-    }
-
-    // Load Products
-    function loadProducts() {
-        $.ajax({
-            type: "GET",
-            url: "/api/Product/GetProducts",
-            success: function (products) {
-                var tableBody = $("#productsTable tbody");
-                tableBody.empty();
-
-                $.each(products, function (index, product) {
-                    var row = $("<tr>");
-                    row.append($("<td>").text(product.productName));
-                    row.append($("<td>").text(product.productPrice.toFixed(2)));
-                    row.append($("<td>").html(`<button class="btn btn-primary" data-toggle="modal" data-target="#editProductModal" data-id="${product.id}">Edit</button>`));
-                    row.append($("<td>").html(`<button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button>`));
-                    tableBody.append(row);
-                });
-            }
-        });
-    }
-
-    // Initial product load
-    loadProducts();
-</script> *@ 
-
-
-
-
-
-
-

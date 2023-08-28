@@ -1,7 +1,7 @@
-﻿    // Load products on page load
+﻿
     loadProducts();
 
-    // Load products
+
     function loadProducts() {
         $.ajax({
             url: '/api/Product/GetProducts',
@@ -12,7 +12,7 @@
         });
     }
 
-    // Display products in the table
+
     function displayProducts(products) {
         var table = $('#productsTable tbody');
         table.empty();
@@ -45,27 +45,26 @@
             data: JSON.stringify(data),
             contentType: "application/json",
             success: function () {
-                // Refresh product list after successful creation
+               
                 loadProducts();
                 $("#createProductModal").modal("hide");
             }
         });
     });
-    // Edit product
+
     $('#productsTable').on('click', '.edit-btn', function () {
         var row = $(this).closest('tr');
         var productId = row.data('id');
         var productName = row.find('td:eq(0)').text();
         var productPrice = parseFloat(row.find('td:eq(1)').text());
 
-        // Populate edit form
+
         $('#editProductId').val(productId);
         $('#editProductName').val(productName);
         $('#editProductPrice').val(productPrice);
         $('#editProductModal').modal('show');
     });
 
-    // Handle edit product form submission
     $('#editProductForm').submit(function (e) {
         e.preventDefault();
 
