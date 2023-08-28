@@ -11,7 +11,7 @@
     "AjaxMVC": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7244;http://localhost:5000",
+      "applicationUrl": "https://localhost:7177;http://localhost:5099",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

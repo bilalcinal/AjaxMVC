@@ -39,7 +39,7 @@ namespace AjaxMVC.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> UpdateProduct(int id, ProductModel model)
         {
             var existingEntity = await _ajaxMvcDbContext.Products.FindAsync(id);
@@ -57,7 +57,7 @@ namespace AjaxMVC.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var entity = await _ajaxMvcDbContext.Products.FindAsync(id);

@@ -44,7 +44,7 @@
                             <label for="productPrice">Product Price</label>
                             <input type="number" class="form-control" id="productPrice" step="0.01" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="createButton">Create</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
                     </form>
                 </div>
             </div>
@@ -52,11 +52,138 @@
     </div>
 
     <!-- Edit Product Modal -->
-    <!-- Diğer modal kodları burada... -->
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="~/js/site.js"></script>
+    <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProductId">
+                        <div class="form-group">
+                            <label for="editProductName">Product Name</label>
+                            <input type="text" class="form-control" id="editProductName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductPrice">Product Price</label>
+                            <input type="number" class="form-control" id="editProductPrice" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="~/js/site.js"></script>
+
 </body>
-</html>
+</html> 
+@* <script>
+    // Create Product
+    $("#createProductForm").submit(function (event) {
+        event.preventDefault();
+
+        var productName = $("#productName").val();
+        var productPrice = $("#productPrice").val();
+
+        var data = {
+            ProductName: productName,
+            ProductPrice: parseFloat(productPrice)
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/api/Product/CreateProduct",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function () {
+                // Refresh product list after successful creation
+                loadProducts();
+                $("#createProductModal").modal("hide");
+            }
+        });
+    });
+      // Edit product
+    $('#productsTable').on('click', '.edit-btn', function () {
+        var row = $(this).closest('tr');
+        var productId = row.data('id');
+        var productName = row.find('td:eq(0)').text();
+        var productPrice = parseFloat(row.find('td:eq(1)').text());
+
+        // Populate edit form
+        $('#editProductId').val(productId);
+        $('#editProductName').val(productName);
+        $('#editProductPrice').val(productPrice);
+        $('#editProductModal').modal('show');
+    });
+
+    // Handle edit product form submission
+    $('#editProductForm').submit(function (e) {
+        e.preventDefault();
+
+        var productId = parseInt($('#editProductId').val());
+        var productName = $('#editProductName').val();
+        var productPrice = parseFloat($('#editProductPrice').val());
+
+        $.ajax({
+            url: '/api/Product/UpdateProduct?id=' + productId,
+            type: 'POST',
+            data: JSON.stringify({ productName: productName, productPrice: productPrice }),
+            contentType: 'application/json',
+            success: function () {
+                loadProducts();
+                $('#editProductModal').modal('hide');
+            }
+        });
+    });
+    // Delete Product
+    function deleteProduct(productId) {
+        if (confirm("Are you sure you want to delete this product?")) {
+            $.ajax({
+                type: "DELETE",
+                url: `/api/Product/DeleteProduct/${productId}`,
+                success: function () {
+                    loadProducts(); // Refresh product list after successful delete
+                }
+            });
+        }
+    }
+
+    // Load Products
+    function loadProducts() {
+        $.ajax({
+            type: "GET",
+            url: "/api/Product/GetProducts",
+            success: function (products) {
+                var tableBody = $("#productsTable tbody");
+                tableBody.empty();
+
+                $.each(products, function (index, product) {
+                    var row = $("<tr>");
+                    row.append($("<td>").text(product.productName));
+                    row.append($("<td>").text(product.productPrice.toFixed(2)));
+                    row.append($("<td>").html(`<button class="btn btn-primary" data-toggle="modal" data-target="#editProductModal" data-id="${product.id}">Edit</button>`));
+                    row.append($("<td>").html(`<button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button>`));
+                    tableBody.append(row);
+                });
+            }
+        });
+    }
+
+    // Initial product load
+    loadProducts();
+</script> *@ 
+
+
+
+
+
+
+
