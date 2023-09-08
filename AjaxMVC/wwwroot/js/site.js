@@ -10,7 +10,7 @@
             }
         });
     }
-
+    
     function displayProducts(products) {
         var table = $('#productsTable tbody');
         table.empty();
@@ -43,9 +43,12 @@
             data: JSON.stringify(data),
             contentType: "application/json",
             success: function () {
-               
+                alert("Ürün başarıyla eklendi.");
                 loadProducts();
                 $("#createProductModal").modal("hide");
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert("Aynı ürünü ekleyemezsiniz: " + errorThrown);
             }
         });
     });

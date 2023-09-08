@@ -29,48 +29,82 @@ namespace AjaxMVC.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProduct(ProductModel productmodel)
         {
-            var product = new Product
+            try
+            {
+                var existingProduct = await _ajaxMvcDbContext.Products.Where(p => p.ProductName == productmodel.ProductName).FirstOrDefaultAsync();
+
+                if (existingProduct != null)
+                {
+                    throw new InvalidOperationException("Bu ürün zaten mevcut.");
+                }
+
+                var product = new Product
             {
                 ProductName = productmodel.ProductName,
                 ProductPrice = productmodel.ProductPrice,
             };
-            _ajaxMvcDbContext.Products.Add(product);
-            await _ajaxMvcDbContext.SaveChangesAsync();
-            return Ok();
+                _ajaxMvcDbContext.Products.Add(product);
+                await _ajaxMvcDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateProduct(int id, ProductModel model)
         {
-            var existingEntity = await _ajaxMvcDbContext.Products.FindAsync(id);
-
-            if (existingEntity == null)
+            try
             {
-                return NotFound();
+                var existingEntity = await _ajaxMvcDbContext.Products.FindAsync(id);
+
+                if (existingEntity == null)
+                {
+                    return NotFound();
+                }
+
+                existingEntity.ProductName = model.ProductName;
+                existingEntity.ProductPrice = model.ProductPrice;
+
+                await _ajaxMvcDbContext.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            existingEntity.ProductName = model.ProductName;
-            existingEntity.ProductPrice = model.ProductPrice;
-
-            await _ajaxMvcDbContext.SaveChangesAsync();
-
-            return NoContent();
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var entity = await _ajaxMvcDbContext.Products.FindAsync(id);
-
-            if (entity == null)
+            try
             {
-                return NotFound();
+                var entity = await _ajaxMvcDbContext.Products.FindAsync(id);
+
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                _ajaxMvcDbContext.Products.Remove(entity);
+                await _ajaxMvcDbContext.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _ajaxMvcDbContext.Products.Remove(entity);
-            await _ajaxMvcDbContext.SaveChangesAsync();
-
-            return NoContent();
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            
         }
     }
 }
